@@ -1,0 +1,54 @@
+<!-- Toolbar -->
+<div class="toolbar" role="banner">
+    <button class="QuickButton" (click)="quick()">Quick Start</button>
+  <div>
+  <p>Enter the name of a new folder:</p>
+  <input #box (keyup.enter)="onEnter(box.value)" placeholder="Press Enter to create"/>
+</div>
+
+</div>
+
+<div class="MainContainer">
+<ul class="list-group-item">
+  <app-task *ngFor="let quick of this.getService().getListTasksFromIDs(this.getService().getQuickTasks())"
+            [TaskTitle]="quick.TaskTitle"
+            [TaskSubTitle]="quick.TaskSubTitle"
+            [isRunning]="quick.isRunning"
+            [id]="quick.id"
+            [TaskSubID]="quick.TaskSubID"
+            [interval]="quick.interval"
+            [isQuick]="quick.isQuick"
+  >
+  </app-task>
+
+
+
+
+  <app-task *ngFor="let task of this.getService().getListTasksFromIDs(this.getService().getRunningTasks())"
+            [TaskTitle]="task.TaskTitle"
+            [TaskSubTitle]="task.TaskSubTitle"
+            [isRunning]="task.isRunning"
+            [id]="task.id"
+            [TaskSubID]="task.TaskSubID"
+            [interval]="task.interval"
+            [TaskTime]="task.TaskTime"
+
+  ></app-task>
+
+ <li> <app-task-folder *ngFor="let folder of this.getService().getFolders()"
+                       [TaskFolderName]="folder.TaskFolderName"
+                       [TaskFolderContentIsVisible]="folder.TaskFolderContentIsVisible"
+                       [TaskFolderTotalTime]="folder.TaskFolderTotalTime"
+                       [id]="folder.id"
+                       [canEdit]="folder.canEdit"
+
+
+ ></app-task-folder></li>
+
+</ul>
+
+
+
+</div>
+
+<router-outlet></router-outlet>

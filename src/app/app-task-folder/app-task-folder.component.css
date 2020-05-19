@@ -1,0 +1,15 @@
+li{
+  font-size: 1rem;
+  margin: 1rem;
+  list-style: none;
+}
+div{
+  border-radius: 10px;
+  background-color: lightgray;
+  border-color: darkgray;
+  padding: 3px;
+}
+
+ul{
+  margin-left: 2rem;
+}

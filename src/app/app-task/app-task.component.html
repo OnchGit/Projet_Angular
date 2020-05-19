@@ -1,0 +1,29 @@
+
+
+<li >
+  <div class="col-xs-12">
+    <h4>{{TaskTitle}} -- <ng-container *ngIf="_reload">{{TaskRenderTimer}}</ng-container></h4>
+    <p class="sub">{{TaskSubTitle}}</p>
+<!--    <a routerLink="task/{{id}}"> testRoute </a>-->
+    <p><button (click)="buttonLogic()"> Start/Stop</button> <button (click)="editLogic()" *ngIf="!isQuick">Edit</button><button (click)="delete()">Delete</button><button (click)="changeFolderLogic()" *ngIf="!isQuick">Change Task Folder</button></p>
+
+    <div *ngIf="edit">
+      <p><input #box (keyup.enter)="onEnter(box.value)" placeholder="Press enter to edit the task!"/></p>
+    </div>
+  </div>
+  <div *ngIf="changeFolder">
+
+    <app-task-folder *ngFor="let elem of getService().getFolders()"
+                     [TaskFolderName]="elem.TaskFolderName"
+                     [id]="elem.id"
+                     [showCommands]="false"
+                     [ParentTaskID]="this.id"
+                     [showSelector]="true"
+    >
+    </app-task-folder>
+
+{{id}}
+  </div>
+
+</li>
+

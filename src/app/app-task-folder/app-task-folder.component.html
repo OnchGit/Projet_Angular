@@ -1,0 +1,42 @@
+
+<ng-container>
+<li>
+  <div>
+    <p>{{TaskFolderName}} <button *ngIf="showSelector" (click)="selectorLogic()"> Choose this folder</button>   </p>
+    <p>Total Time: {{TaskFolderTotalTime}}</p>
+
+    <div *ngIf="showCommands" >
+      <button (click)="showContent()"> Show Contents</button>
+      <button (click)="creaLogic()">Create A Task</button>
+      <button *ngIf="canEdit" (click)="editLogic()">Edit the Folder</button>
+    </div>
+
+  </div>
+
+  <div *ngIf="createTask">
+    <input #box (keyup.enter)="onEnter(box.value)" placeholder="Task Title"/>
+    <p>Press Enter to create the new task!</p>
+  </div>
+
+  <div *ngIf="edit">
+    <input #box2 (keyup.enter)="editName(box2.value)" placeholder="New Folder Name"/>
+    <p>Press Enter to edit the folder!</p>
+  </div>
+
+    <ul class="list-group-item" *ngIf="TaskFolderContentIsVisible">
+      <app-task *ngFor="let task of this.getService().getListTasksFromIDs(this.getService().getTasksFromFolder(this.id))"
+                [TaskTitle]="task.TaskTitle"
+                [TaskSubTitle]="task.TaskSubTitle"
+                [isRunning]="task.isRunning"
+                [id]="task.id"
+                [TaskSubID]="task.TaskSubID"
+                [interval]="task.interval"
+                [TaskTime]="task.TaskTime"
+      >
+      </app-task>
+    </ul>
+
+
+
+</li>
+</ng-container>
