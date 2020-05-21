@@ -1,13 +1,14 @@
 <!-- Toolbar -->
 <div class="toolbar" role="banner">
+
     <button class="QuickButton" (click)="quick()">Quick Start</button>
   <div>
-  <p>Enter the name of a new folder:</p>
-  <input #box (keyup.enter)="onEnter(box.value)" placeholder="Press Enter to create"/>
+  <input #box placeholder="Folder Title"/>
+    <button (click)="onEnter(box.value)"> Create A New Folder</button>
 </div>
 
 </div>
-
+<div>Total: {{this.getService().convertSecondsToTime(this.getService().TotalRun)}}</div>
 <div class="MainContainer">
 <ul class="list-group-item">
   <app-task *ngFor="let quick of this.getService().getListTasksFromIDs(this.getService().getQuickTasks())"

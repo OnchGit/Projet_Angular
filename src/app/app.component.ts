@@ -14,6 +14,9 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.getService().setup();
+    setInterval(() => {
+      this.getService().totalTimerHandler();
+    }, 1000);
   }
 
   onEnter(value: string) {

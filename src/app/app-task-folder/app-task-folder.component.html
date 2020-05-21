@@ -14,13 +14,13 @@
   </div>
 
   <div *ngIf="createTask">
-    <input #box (keyup.enter)="onEnter(box.value)" placeholder="Task Title"/>
-    <p>Press Enter to create the new task!</p>
+    <input #box placeholder="Task Title"/>
+    <button (click)="onEnter(box.value)">Create A Task</button>
   </div>
 
   <div *ngIf="edit">
-    <input #box2 (keyup.enter)="editName(box2.value)" placeholder="New Folder Name"/>
-    <p>Press Enter to edit the folder!</p>
+    <input #box2 placeholder="New Folder Name"/>
+    <button (click)="editName(box2.value)">Edit The Folder</button>
   </div>
 
     <ul class="list-group-item" *ngIf="TaskFolderContentIsVisible">

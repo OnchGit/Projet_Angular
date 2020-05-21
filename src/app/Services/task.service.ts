@@ -13,6 +13,7 @@ export class TaskService {
   FolderID = 0;
   QuickStartCount = 1;
   isFirst = true;
+  TotalRun = 0;
 
   public getTaskList() {
     return this.taskList;
@@ -39,6 +40,16 @@ export class TaskService {
     this.taskList.forEach((elem: ModelTask, key: number) => {
       if (elem.isRunning && !elem.isQuick) {
        tmp.push(elem.id);
+      }
+    });
+    return tmp;
+  }
+
+  public getAllRunningTasks() {
+    const tmp: Array<number> = new Array<number>();
+    this.taskList.forEach((elem: ModelTask, key: number) => {
+      if (elem.isRunning) {
+        tmp.push(elem.id);
       }
     });
     return tmp;
@@ -124,7 +135,6 @@ export class TaskService {
     const tempId = this.giveTaskID();
     tmp.TaskTitle = value;
     tmp.TaskTime = 0;
-    console.log('MODEL TASKTITLE: ' + tmp.TaskTitle );
     tmp.id = tempId;
     if (!isNaN(FolderID)) {
       tmp.TaskSubTitle = this.FolderList.get(FolderID).TaskFolderName;
@@ -134,7 +144,6 @@ export class TaskService {
       tmp.isQuick = true;
     }
     this.taskList.set(tempId, tmp);
-    console.log(this.getTaskFromID(tempId).TaskTitle);
   }
 
   // create a folder
@@ -145,6 +154,8 @@ export class TaskService {
     tmp.id = tempId;
     if (tmp.id === 0) {
       tmp.canEdit = false;
+    } else{
+      tmp.canEdit = true;
     }
     this.FolderList.set(tempId, tmp);
 
@@ -216,14 +227,11 @@ export class TaskService {
   }
 
   // handles timer start
-  public startTimer(id: number){
+  public startTimer(id: number) {
     this.getTaskFromID(id).isRunning = true;
     this.getTaskFromID(id).interval = setInterval(() => {
       this.getTaskFromID(id).TaskTime++;
       console.log('TIMER SERVICE ' + id +  this.getTaskFromID(id).TaskTime);
-      //this.TaskTime = this.getService().getTaskFromID(this.id).TaskTime;
-      //this.timerConvert();
-      //this.getService().getTaskFromID(this.id).TaskTime = this.TaskTime;
     }, 1000);
   }
 
@@ -231,6 +239,15 @@ export class TaskService {
     this.getTaskFromID(id).isRunning = false;
     clearInterval(this.getTaskFromID(id).interval);
   }
+
+  // handles total timer
+  public totalTimerHandler() {
+    const tmp = this.getAllRunningTasks();
+    if (tmp.length > 0 ) {
+      this.TotalRun++;
+    }
+  }
+
 
 
 
