@@ -1,9 +1,6 @@
-import {AppTaskComponent} from '../app-task/app-task.component';
-import {range} from 'rxjs';
-import {AppTaskFolderComponent} from '../app-task-folder/app-task-folder.component';
-import {newArray} from '@angular/compiler/src/util';
 import {ModelTask} from '../Models/ModelTask';
 import {ModelFolder} from '../Models/ModelFolder';
+
 
 
 export class TaskService {
@@ -14,6 +11,7 @@ export class TaskService {
   QuickStartCount = 1;
   isFirst = true;
   TotalRun = 0;
+  LastRunDate: Date = new Date();
 
   public getTaskList() {
     return this.taskList;
@@ -101,6 +99,7 @@ export class TaskService {
 
   // deletes a Task
   public deleteTask(id: number) {
+    clearInterval(this.taskList.get(id).interval);
     this.taskList.delete(id);
   }
 
@@ -140,7 +139,7 @@ export class TaskService {
       tmp.TaskSubTitle = this.FolderList.get(FolderID).TaskFolderName;
       tmp.TaskSubID = FolderID;
       tmp.isQuick = false;
-    } else{
+    } else {
       tmp.isQuick = true;
     }
     this.taskList.set(tempId, tmp);
@@ -231,7 +230,6 @@ export class TaskService {
     this.getTaskFromID(id).isRunning = true;
     this.getTaskFromID(id).interval = setInterval(() => {
       this.getTaskFromID(id).TaskTime++;
-      console.log('TIMER SERVICE ' + id +  this.getTaskFromID(id).TaskTime);
     }, 1000);
   }
 
@@ -248,7 +246,73 @@ export class TaskService {
     }
   }
 
+  public persistencyInit() {
+    const tmp = new Date(Date.now()).valueOf();
+    if (localStorage.getItem('ServiceData') != null) {
+      const tempService: TaskService = JSON.parse(localStorage.getItem('ServiceData'));
+      this.TaskID = tempService.TaskID;
+      this.FolderID = tempService.FolderID;
+      this.QuickStartCount = tempService.QuickStartCount;
+      this.isFirst = tempService.isFirst;
+      this.TotalRun = tempService.TotalRun;
+      this.LastRunDate = new Date(tempService.LastRunDate);
+      this.getMapsFromLocal();
+      const tmp2 = this.LastRunDate.valueOf();
+      const addTime = (tmp - tmp2) / 1000;
+      this.taskPersistency(addTime);
+    }
+  }
 
+  public taskPersistency(seconds: number) {
+    const tmp = this.getAllRunningTasks();
+    console.log('RUNNING SIZE: ' + tmp.length);
+    // tslint:disable-next-line:prefer-for-of
+    for (let i = 0; i < tmp.length; i++) {
+      console.log('BEFORE: ' + this.getTaskFromID(tmp[i]).TaskTime);
+      this.getTaskFromID(tmp[i]).TaskTime = this.getTaskFromID(tmp[i]).TaskTime + seconds;
+      console.log('AFTER: ' + this.getTaskFromID(tmp[i]).TaskTime);
+      this.startTimer(tmp[i]);
+    }
+  }
+
+  public runningPersistency() {
+    this.LastRunDate = new Date(Date.now());
+    localStorage.setItem('ServiceData', JSON.stringify(this));
+    this.sendMapsToLocal();
+  }
+
+  public sendMapsToLocal() {
+    const tmpTask: Array<ModelTask> = new Array<ModelTask>();
+    this.taskList.forEach((elem: ModelTask, key: number ) => {
+        tmpTask.push(elem);
+      });
+
+    const tmpFolder: Array<ModelFolder> = new Array<ModelFolder>();
+    this.FolderList.forEach((elem: ModelFolder, key: number ) => {
+      tmpFolder.push(elem);
+    });
+
+    localStorage.setItem('TaskList', JSON.stringify(tmpTask));
+    localStorage.setItem('FolderList', JSON.stringify(tmpFolder));
+  }
+
+
+  public getMapsFromLocal() {
+
+    const tmpTask: Array<ModelTask> = JSON.parse( localStorage.getItem('TaskList'));
+    const tmpFolder: Array<ModelFolder> = JSON.parse( localStorage.getItem('FolderList'));
+    const MapTask: Map<number, ModelTask> = new Map<number, ModelTask>();
+    const MapFolder: Map<number, ModelFolder> = new Map<number, ModelFolder>();
+    for (let i = 0 ; i < tmpTask.length; i++) {
+      MapTask.set(tmpTask[i].id, tmpTask[i]);
+    }
+
+    for (let i = 0 ; i < tmpFolder.length; i++) {
+      MapFolder.set(tmpFolder[i].id, tmpFolder[i]);
+    }
+    this.taskList = MapTask;
+    this.FolderList = MapFolder;
+  }
 
 
 

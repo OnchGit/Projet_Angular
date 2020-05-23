@@ -9,6 +9,7 @@
       <button (click)="showContent()"> Show Contents</button>
       <button (click)="creaLogic()">Create A Task</button>
       <button *ngIf="canEdit" (click)="editLogic()">Edit the Folder</button>
+      <button *ngIf="canEdit" (click)="this.getService().deleteFolder(this.id)">Delete the Folder</button>
     </div>
 
   </div>

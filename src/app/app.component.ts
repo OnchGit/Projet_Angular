@@ -13,9 +13,18 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getService().setup();
+    if (localStorage.getItem('ServiceData') === null || localStorage.getItem('ServiceData') === '' ) {
+      this.getService().setup();
+      console.log('setup');
+    } else {
+      this.getService().persistencyInit();
+      console.log('Persistency');
+      console.log(localStorage.getItem('ServiceData'));
+    }
+
     setInterval(() => {
       this.getService().totalTimerHandler();
+      this.getService().runningPersistency();
     }, 1000);
   }
 
