@@ -8,8 +8,9 @@
 </div>
 
 </div>
-<div>Total: {{this.getService().convertSecondsToTime(this.getService().TotalRun)}}</div>
+
 <div class="MainContainer">
+  <div>Total: {{this.getService().convertSecondsToTime(this.getService().TotalRun)}}</div>
 <ul class="list-group-item">
   <app-task *ngFor="let quick of this.getService().getListTasksFromIDs(this.getService().getQuickTasks())"
             [TaskTitle]="quick.TaskTitle"

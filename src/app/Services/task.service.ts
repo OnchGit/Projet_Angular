@@ -265,12 +265,9 @@ export class TaskService {
 
   public taskPersistency(seconds: number) {
     const tmp = this.getAllRunningTasks();
-    console.log('RUNNING SIZE: ' + tmp.length);
     // tslint:disable-next-line:prefer-for-of
     for (let i = 0; i < tmp.length; i++) {
-      console.log('BEFORE: ' + this.getTaskFromID(tmp[i]).TaskTime);
       this.getTaskFromID(tmp[i]).TaskTime = this.getTaskFromID(tmp[i]).TaskTime + seconds;
-      console.log('AFTER: ' + this.getTaskFromID(tmp[i]).TaskTime);
       this.startTimer(tmp[i]);
     }
   }

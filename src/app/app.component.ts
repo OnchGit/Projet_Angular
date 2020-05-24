@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {TaskService} from './Services/task.service';
-import {ModelFolder} from './Models/ModelFolder';
+
 
 @Component({
   selector: 'app-root',
